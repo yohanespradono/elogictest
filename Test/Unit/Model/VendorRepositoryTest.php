@@ -2,6 +2,9 @@
 
 namespace Yohanes\Vendor\Test\Unit\Model;
 
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Yohanes\Vendor\Model\VendorRepository;
@@ -30,6 +33,9 @@ class VendorRepositoryTest extends TestCase
      */
     protected $vendorFactoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,21 +51,6 @@ class VendorRepositoryTest extends TestCase
             'load',
             'getId'
         ])->disableOriginalConstructor()->getMock();
-        $data = [
-            'id' => 1,
-            'name' => 'Yohanes Pradono',
-            'description' => "Lorem ipsum dolor sit amet",
-            'image' => 'yohanes.png'
-        ];
-
-        $this->vendorMock->setData($data);
-
-        $this->vendorFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->returnValue($this->vendorMock));
-
-        $this->vendorMock->expects($this->once())->method('load');
-        $this->vendorMock->expects($this->once())->method('getId')->willReturn(1);
 
         $this->vendorRepository = $this->objectManager->getObject(
             VendorRepository::class,
@@ -67,36 +58,90 @@ class VendorRepositoryTest extends TestCase
         );
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->objectManager = null;
+        $this->vendorResourceModelMock = null;
+        $this->vendorFactoryMock = null;
+        $this->vendorMock = null;
+    }
+
     public function testGetById(): void
     {
-        $result = $this->vendorRepository->getById(1);
-
         $data = [
             'id' => 1,
             'name' => 'Yohanes Pradono',
             'description' => "Lorem ipsum dolor sit amet",
             'image' => 'yohanes.png'
         ];
+        $this->vendorMock->setData($data);
+        $this->vendorFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->returnValue($this->vendorMock));
+
+        $this->vendorMock->expects($this->once())->method('load');
+        $this->vendorMock->expects($this->once())->method('getId')->willReturn($data['id']);
+
+        $result = $this->vendorRepository->getById(1);
         $this->assertEquals($data, $result->getData());
     }
 
     public function testDeleteByIdShouldReturnTrue()
     {
+        $data = [
+            'id' => 1,
+            'name' => 'Yohanes Pradono',
+            'description' => "Lorem ipsum dolor sit amet",
+            'image' => 'yohanes.png'
+        ];
+        $this->vendorMock->setData($data);
+        $this->vendorFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->returnValue($this->vendorMock));
+
+        $this->vendorMock->expects($this->once())->method('load');
+        $this->vendorMock->expects($this->once())->method('getId')->willReturn($data['id']);
+
         $result = $this->vendorRepository->deleteById(1);
         $this->assertTrue($result);
     }
 
     public function testSaveShouldReturnVendor()
     {
-        $this->vendorResourceModelMock->expects($this->once())->method('save')->with($this->vendorMock);
-        $result = $this->vendorRepository->save($this->vendorMock);
-
         $data = [
             'id' => 1,
             'name' => 'Yohanes Pradono',
             'description' => "Lorem ipsum dolor sit amet",
             'image' => 'yohanes.png'
         ];
+        $this->vendorMock->setData($data);
+        $this->vendorFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->returnValue($this->vendorMock));
+        $this->vendorResourceModelMock->expects($this->once())->method('save')->with($this->vendorMock);
+        $result = $this->vendorRepository->save($this->vendorMock);
+
         $this->assertEquals($data, $result->getData());
+    }
+
+    public function testSaveThrowsConnectionException()
+    {
+        $this->vendorResourceModelMock->expects($this->once())
+            ->method('save')
+            ->willThrowException(new ConnectionException(__('Database connection error')));
+        $this->expectException(TemporaryCouldNotSaveException::class);
+        $this->vendorRepository->save($this->vendorMock);
+    }
+
+    public function testSaveThrowsAnyException()
+    {
+        $this->vendorResourceModelMock->expects($this->once())
+            ->method('save')
+            ->willThrowException(new DeadlockException(__('Database deadlock found when trying to get lock')));
+        $this->expectException(\Exception::class);
+        $this->vendorRepository->save($this->vendorMock);
     }
 }

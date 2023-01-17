@@ -40,17 +40,6 @@ Evidences:
  - Flush the cache by running `php bin/magento cache:flush`
 
 
-## Configuration
-
-
-
-
-## Specifications
-
-
-
-
-## Attributes
-
-
-
+## Usage
+- Login to admin
+- Navigate to Catalog -> Vendors

@@ -74,7 +74,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getMediaUrl()
     {
-        // requestaquote is IMAGE_UPLOAD_DIRECTORY name.
         $mediaUrl = $this->storeManager->getStore()
                 ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA).'vendor/image/';
 

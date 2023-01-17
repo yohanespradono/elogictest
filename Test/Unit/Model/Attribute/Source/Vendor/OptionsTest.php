@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class OptionsTest extends TestCase
 {
-
     /**
      *
      * @var Options
@@ -25,6 +24,9 @@ class OptionsTest extends TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -38,6 +40,16 @@ class OptionsTest extends TestCase
             Options::class,
             ['collectionFactory' => $this->collectionFactoryMock]
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->objectManager = null;
+        $this->collectionFactoryMock = null;
+        $this->options = null;
     }
 
     public function testReturnArray()

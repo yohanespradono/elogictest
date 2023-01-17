@@ -118,7 +118,6 @@ class VendorViewModel implements \Magento\Framework\View\Element\Block\ArgumentI
      */
     public function getMediaUrl()
     {
-        // requestaquote is IMAGE_UPLOAD_DIRECTORY name.
         $mediaUrl = $this->storeManager->getStore()
                 ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA).'vendor/image/';
 
