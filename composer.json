@@ -1,0 +1,22 @@
+{
+    "name": "yohanes/module-vendor",
+    "description": "Elogic.co test",
+    "type": "magento2-module",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Yohanes Pradono",
+            "email": "some@email.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Yohanes\\Vendor\\": ""
+        }
+    }
+}

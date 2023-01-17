@@ -1,0 +1,27 @@
+.vendor-container {
+    display: flex;
+    flex-direction: column;
+    .top {
+        display: flex;
+        flex-direction: row;
+        .image {
+            height:auto;
+            width:100px;
+            overflow:hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            img {
+                width:100%;
+                object-fit:cover
+            }
+        }
+        .name {
+            flex-grow: 1;
+            text-align: right;
+            h2 {
+                margin-top: 15px;
+            }
+        }
+    }
+}

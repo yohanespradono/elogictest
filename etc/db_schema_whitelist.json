@@ -1,0 +1,18 @@
+{
+    "yohanes_vendor": {
+        "column": {
+            "entity_id": true,
+            "name": true,
+            "description": true,
+            "image": true,
+            "created_at": true
+        },
+        "index": {
+            "YOHANES_VENDOR_ENTITY_ID": true,
+            "YOHANES_VENDOR_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Yohanes\Vendor\Api\Data\VendorInterface" type="Yohanes\Vendor\Model\Vendor"/>
+    <preference for="Yohanes\Vendor\Api\VendorRepositoryInterface" type="Yohanes\Vendor\Model\VendorRepository"/>
+
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="yohanes_vendor_vendor_grid_data_source" xsi:type="string">Yohanes\Vendor\Model\ResourceModel\Vendor\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Yohanes\Vendor\Model\ResourceModel\Vendor\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">yohanes_vendor</argument>
+            <argument name="resourceModel" xsi:type="string">Yohanes\Vendor\Model\ResourceModel\Vendor</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VendorImageUpload" type="Magento\Catalog\Model\ImageUploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">vendor/tmp/image</argument>
+            <argument name="basePath" xsi:type="string">vendor/image</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="jpg" xsi:type="string">image/jpg</item>
+                <item name="jpeg" xsi:type="string">image/jpeg</item>
+                <item name="gif" xsi:type="string">image/gif</item>
+                <item name="png" xsi:type="string">image/png</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Yohanes\Vendor\Controller\Adminhtml\Vendor\Save">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">VendorImageUpload</argument>
+        </arguments>
+    </type>
+    <type name="Yohanes\Vendor\Controller\Adminhtml\Vendor\Image\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">VendorImageUpload</argument>
+        </arguments>
+    </type>
+</config>
